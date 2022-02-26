@@ -81,6 +81,22 @@ export default defineComponent({
 					attribute: 'available',
 					name: 'availability'
 				},
+					{
+					attribute: 'section',
+					name: 'section'
+				},
+					{
+					attribute: 'cost',
+					name: 'cost'
+				},
+					{
+					attribute: 'description',
+					name: 'description'
+				},
+					{
+					attribute: 'additional info',
+					name: 'additional info'
+				},
 			]
 		}
 	},
