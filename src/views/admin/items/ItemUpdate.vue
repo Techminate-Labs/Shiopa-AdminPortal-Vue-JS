@@ -42,16 +42,36 @@
 						placeholder="13"
 					/>
 				</label>
-					<label class="label flex flex-col py-2" for="inventory">
-						Inventory
-						<input
-							class="text-input" 
-							type="text" 
-							id="inventory" 
-							v-model="item.inventory" 
-							placeholder="3"
-						/>
-					</label>
+				<label class="label flex flex-col py-2" for="inventory">
+					Inventory
+					<input
+						class="text-input" 
+						type="text" 
+						id="inventory" 
+						v-model="item.inventory" 
+						placeholder="3"
+					/>
+				</label>
+				<label class="label flex flex-col py-2" for="name">
+					Description
+					<input
+						class="text-input" 
+						type="text" 
+						id="description" 
+						v-model="item.description" 
+						placeholder="description of the item"
+					/>
+				</label>
+				<label class="label flex flex-col py-2" for="name">
+					Additional Information
+					<input
+						class="text-input" 
+						type="text" 
+						id="additional_info" 
+						v-model="item.additional_info"  
+						placeholder="additional information of the item"
+					/>
+				</label>
 				<button 
 					class="base-btn float-right"
 					v-show="$store.getters.userCan('edit', 'Items')" 
@@ -95,6 +115,15 @@
 							:options="getSupplierOptions"
 							:searchable="true"
 							placeholder="Pick a Supplier"
+						/>
+					</label>
+					<label class="label flex flex-col py-2">
+						Select Section
+						<Multiselect
+							v-model="item.section"
+							:options="getSectionOptions"
+							:searchable="true"
+							placeholder="Pick a Section"
 						/>
 					</label>
 				</div>
@@ -165,6 +194,12 @@ export default defineComponent({
 		return {
 			item: {} as SingleItem,
 			categories: [],
+			sections: [
+				{"id":1,"label":"Featured", "name":"featured"},
+				{"id":2,"label":"Popular", "name":"popular"},
+				{"id":3,"label":"latest", "name":"latest"},
+				{"id":4,"label":"discounted", "name":"discounted"},
+			],
 			brands: [],
 			units: [],
 			suppliers: [],
@@ -242,9 +277,12 @@ export default defineComponent({
 			fd.append("unit_id", data.unit_id)
 			fd.append("supplier_id", data.supplier_id)
 			fd.append("name", data.name)
+			fd.append('section', data.section)
 			fd.append("price", data.price)
 			fd.append("inventory", data.inventory)
 			fd.append("discount", data.discount)
+			fd.append("description", data.description)
+			fd.append("additional_info", data.additional_info)
 			fd.append('expire_date', data.expire_date)
 			fd.append('available', available)
 			fd.append('image', image)
@@ -315,7 +353,17 @@ export default defineComponent({
 				})
 			})
 			return _
-		}
+		},
+		getSectionOptions(): Array<any> {
+			let _: Array<any> = []
+			this.sections.map(function(section: any) {
+				_.push({
+				value: section.name,
+				label: section.label
+				})
+			})
+			return _
+		},
 	},
 	async mounted() {
 		this.fetchItem()
